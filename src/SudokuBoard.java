@@ -1,14 +1,23 @@
 import java.util.*;
 
 public class SudokuBoard {
-  private final PriorityQueue<SudokuTile> board;
+  private PriorityQueue<SudokuTile> board;
 
   public SudokuBoard() {
     board = getBlankBoard();
   }
 
+  public SudokuBoard(SudokuBoard other) {
+    this.board = new PriorityQueue<>(Comparator.comparingInt(SudokuTile::getCandidateAmount));
+
+    for(SudokuTile tile : other.getBoard()) {
+      this.board.add(new SudokuTile(tile));
+    }
+  }
+
   public void solve() {
     int move = 1;
+
     while (board.peek().getCandidateAmount() != 10) {
       System.out.println("Making move #" + move);
       makeMove();
@@ -16,14 +25,52 @@ public class SudokuBoard {
     }
   }
 
+  public boolean solveRecursively() {
+    return solveRecursively(1, 0);
+  }
+
+  public boolean solveRecursively(int move, int numToPlace) {
+    int numBestTileCandidates = board.peek().getCandidateAmount();
+
+    // If the board is finished, return whether it is solved
+    switch (numBestTileCandidates) {
+      case 10 -> { return true; }
+      case 0 -> { return false; }
+    }
+
+    if (numBestTileCandidates == 1 || numToPlace != 0) {
+      System.out.println("Making move #" + move);
+      makeMove(numToPlace);
+      return solveRecursively(move + 1, 0);
+    }
+
+    for (int candidate : board.peek().getCandidates()) {
+      SudokuBoard clonedBoard = new SudokuBoard(this);
+      boolean wasBoardSolved = clonedBoard.solveRecursively(move, candidate);
+
+      if (wasBoardSolved) {
+        this.board = clonedBoard.getBoard();
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public int[] makeMove() {
+    return makeMove(0);
+  }
+
+  public int[] makeMove(int numToPlace) {
     SudokuTile bestTile = board.peek();
     System.out.println(bestTile);
+
     if (bestTile.getCandidateAmount() != 1) {
       System.out.println("Trying to change tile with candidate amount " + bestTile.getCandidateAmount());
     }
 
-    int newVal = bestTile.getRandomCandidate();
+    int newVal = numToPlace != 0 ? numToPlace : bestTile.getRandomCandidate();
     boolean wasTileChanged = tryChangeTile(bestTile, newVal);
 
     if (!wasTileChanged) {

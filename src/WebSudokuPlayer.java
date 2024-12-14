@@ -15,6 +15,12 @@ public class WebSudokuPlayer {
     webBoard = driver.findElement(By.id("puzzle_grid"));
   }
 
+  public WebSudokuPlayer(int level) {
+    driver = new ChromeDriver();
+    driver.get("https://west.websudoku.com/?level=" + level);
+    webBoard = driver.findElement(By.id("puzzle_grid"));
+  }
+
   public void solve() throws InterruptedException {
     int move = 1;
     while (board.getBoard().peek().getCandidateAmount() != 10) {

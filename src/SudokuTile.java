@@ -20,6 +20,13 @@ public class SudokuTile {
     this.value = value;
   }
 
+  public SudokuTile(SudokuTile other) {
+    this.x = other.getX();
+    this.y = other.getY();
+    this.candidates = (HashSet<Integer>) other.getCandidates().clone();
+    this.value = other.getValue();
+  }
+
   public int getRandomCandidate() {
     Integer[] candidatesArr = getCandidates().toArray(new Integer[0]);
     int index = (int) (Math.random() * candidatesArr.length);

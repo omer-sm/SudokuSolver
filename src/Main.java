@@ -1,10 +1,20 @@
 public class Main {
   public static void main(String[] args) throws InterruptedException {
-    WebSudokuPlayer player = new WebSudokuPlayer();
-    player.initializeBoard();
-    player.solve();
+    /*SudokuBoard board = new SudokuBoard();
+    testBoard1(board);
+    board.solveRecursively();
 
-    //  player.getDriver().close();
+    System.out.println(board);*/
+
+    WebSudokuPlayer player = new WebSudokuPlayer(4);
+    player.initializeBoard();
+    SudokuBoard board = new SudokuBoard(player.getBoard());
+
+    board.solveRecursively();
+    System.out.println(board);
+
+
+    // player.solve();
   }
 
   public static void testBoard1(SudokuBoard board) {
