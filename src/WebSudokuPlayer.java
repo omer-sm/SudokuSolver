@@ -22,6 +22,23 @@ public class WebSudokuPlayer {
   }
 
   public void solve() throws InterruptedException {
+    SudokuBoard solvedBoard = new SudokuBoard(this.getBoard());
+    solvedBoard.solveRecursively();
+    int[][] solutionData = solvedBoard.getIntBoard();
+    System.out.println("Board solved!");
+    int move = 1;
+
+    while (board.getBoard().peek().getCandidateAmount() != 10) {
+      System.out.println("Making move #" + move);
+      int x = board.getBoard().peek().getX() - 1;
+      int y = board.getBoard().peek().getY() - 1;
+      makeMove(solutionData[y][x]);
+      move++;
+      Thread.sleep(100);
+    }
+  }
+
+  public void solveIteratively() throws InterruptedException {
     int move = 1;
     while (board.getBoard().peek().getCandidateAmount() != 10) {
       System.out.println("Making move #" + move);
@@ -33,6 +50,12 @@ public class WebSudokuPlayer {
 
   public void makeMove() {
     int[] moveData = board.makeMove();
+    WebElement cellInput = webBoard.findElement(By.id(getCellId(moveData[0], moveData[1])));
+    cellInput.sendKeys(String.valueOf(moveData[2]));
+  }
+
+  public void makeMove(int numToPlace) {
+    int[] moveData = board.makeMove(numToPlace);
     WebElement cellInput = webBoard.findElement(By.id(getCellId(moveData[0], moveData[1])));
     cellInput.sendKeys(String.valueOf(moveData[2]));
   }

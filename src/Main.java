@@ -8,13 +8,8 @@ public class Main {
 
     WebSudokuPlayer player = new WebSudokuPlayer(4);
     player.initializeBoard();
-    SudokuBoard board = new SudokuBoard(player.getBoard());
 
-    board.solveRecursively();
-    System.out.println(board);
-
-
-    // player.solve();
+    player.solve();
   }
 
   public static void testBoard1(SudokuBoard board) {

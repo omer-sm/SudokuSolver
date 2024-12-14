@@ -44,6 +44,7 @@ public class SudokuBoard {
       return solveRecursively(move + 1, 0);
     }
 
+    // If there are multiple candidates, try each one
     for (int candidate : board.peek().getCandidates()) {
       SudokuBoard clonedBoard = new SudokuBoard(this);
       boolean wasBoardSolved = clonedBoard.solveRecursively(move, candidate);
